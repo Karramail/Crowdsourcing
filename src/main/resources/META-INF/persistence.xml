@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+  <persistence-unit name="manager1" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    
+<!--     <class>ppdCrowd.Crowdsourcing.entity.Comparaison</class>
+    <class>ppdCrowd.Crowdsourcing.entity.Fichier</class>
+    <class>ppdCrowd.Crowdsourcing.entity.Import</class> -->
+    <class>ppdCrowd.Crowdsourcing.entity.Ligne</class>
+<!--     <class>ppdCrowd.Crowdsourcing.entity.Resultat</class>
+    <class>ppdCrowd.Crowdsourcing.entity.ResultatComparaison</class>
+    <class>ppdCrowd.Crowdsourcing.entity.Theme</class>
+    <class>ppdCrowd.Crowdsourcing.entity.Utilisateur</class> -->
+    
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    
+    <properties>
+       	<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://ppdserveur.database.windows.net:1433;databaseName=PPD"/>
+       	<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+    	<property name="javax.persistence.jdbc.user" value="projetsql@ppdserveur"/>
+    	<property name="javax.persistence.jdbc.password" value="Ppdcrowd1"/>
+    </properties>
+    
+    </persistence-unit>
+</persistence>
+
+
