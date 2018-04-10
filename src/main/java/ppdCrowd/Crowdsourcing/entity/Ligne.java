@@ -15,8 +15,8 @@ public class Ligne {
 	
 	private int numeroLigne;
 	
-//	@ManyToOne
-//	private Fichier idFichier;
+	@ManyToOne
+	private Fichier idFichier;
 
 	private String champs1;
 	private String champs2;
@@ -35,6 +35,14 @@ public class Ligne {
 		this.champs4 = champs4;
 	}
 	
+	public Fichier getIdFichier() {
+		return idFichier;
+	}
+
+	public void setIdFichier(Fichier idFichier) {
+		this.idFichier = idFichier;
+	}
+
 	public Ligne() {
 		super();
 		
