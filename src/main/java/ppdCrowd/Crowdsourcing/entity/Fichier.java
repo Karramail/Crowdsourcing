@@ -1,6 +1,5 @@
 package ppdCrowd.Crowdsourcing.entity;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Fichier {
 	
@@ -21,14 +22,15 @@ public class Fichier {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	private String nomFichier;
+	private String nom_fichier;
 	
 	@ManyToOne
-	private Import idImport;
+	private Import id_import;
 	
 	@ManyToOne
-	private Theme idTheme;
+	private Theme id_theme;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="idFichier", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Ligne> lignes;
 	
@@ -45,7 +47,7 @@ public class Fichier {
 
 	public Fichier(String nomFichier) {
 		super();
-		this.nomFichier = nomFichier;
+		this.nom_fichier = nomFichier;
 	}
 
 
@@ -59,27 +61,27 @@ public class Fichier {
 	}
 
 	public String getNomFichier() {
-		return nomFichier;
+		return nom_fichier;
 	}
 
 	public void setNomFichier(String nomFichier) {
-		this.nomFichier = nomFichier;
+		this.nom_fichier = nomFichier;
 	}
 
 	public Import getIdImport() {
-		return idImport;
+		return id_import;
 	}
 
 	public void setIdImport(Import idImport) {
-		this.idImport = idImport;
+		this.id_import = idImport;
 	}
 
 	public Theme getIdTheme() {
-		return idTheme;
+		return id_theme;
 	}
 
 	public void setIdTheme(Theme idTheme) {
-		this.idTheme = idTheme;
+		this.id_theme = idTheme;
 	}
 
 

@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Comparaison {
 
@@ -24,12 +26,14 @@ public class Comparaison {
 	@ManyToOne
 	private Ligne idLigne2;
 
+	@JsonIgnore
 	@OneToMany (mappedBy="idComparaison", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<ResultatComparaison> resultatComparaisons;
 
 	private int resChamp1;
 	private int resChamp2;
 	private int resChamp3;
+	private int resChamp4;
 	
 	public Comparaison() {
 		super();
@@ -46,7 +50,7 @@ public class Comparaison {
 		this.resChamp3 = resChamp3;
 		this.resChamp4 = resChamp4;
 	}
-	private int resChamp4;
+	
 	
 	
 	

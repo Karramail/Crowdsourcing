@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Theme {
 	
@@ -21,9 +23,10 @@ public class Theme {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	private String nomTheme;
+	private String nom_theme;
 	
-	@OneToMany(mappedBy="idTheme", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	@OneToMany(mappedBy="id_theme", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Fichier> fichiers;
 	
 
@@ -34,7 +37,7 @@ public class Theme {
 	
 	public Theme(String name) {
 		super();
-		this.nomTheme = name;
+		this.nom_theme = name;
 	}
 
 
@@ -49,12 +52,12 @@ public class Theme {
 
 
 	public String getNomTheme() {
-		return nomTheme;
+		return nom_theme;
 	}
 
 
 	public void setNomTheme(String nomTheme) {
-		this.nomTheme = nomTheme;
+		this.nom_theme = nomTheme;
 	}
 
 

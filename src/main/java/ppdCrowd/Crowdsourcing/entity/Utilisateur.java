@@ -8,6 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Utilisateur {
@@ -17,6 +21,7 @@ public class Utilisateur {
 	@Id
 	private int id;
 	
+	@Temporal(TemporalType.DATE)
 	private Date createdAt;
 	
 	private String userType;
@@ -25,7 +30,8 @@ public class Utilisateur {
 	
 	private String username;
 	
-	@OneToMany(mappedBy="idDemandeur", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	@OneToMany(mappedBy="id_demandeur", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Import> imports;
 	
 	public Utilisateur() {

@@ -11,6 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Import {
@@ -21,12 +25,14 @@ public class Import {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	private Date dateImport;
+	@Temporal(TemporalType.DATE)
+	private Date date_import;
 	
 	@ManyToOne
-	private Utilisateur idDemandeur;
+	private Utilisateur id_demandeur;
 	
-	@OneToMany(mappedBy="idImport", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	@OneToMany(mappedBy="id_import", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Fichier> fichiers;
 	
 	public Import() {
@@ -36,8 +42,8 @@ public class Import {
 
 	public Import(int id, Date dateImport, Utilisateur idDemandeur) {
 		super();
-		this.dateImport = dateImport;
-		this.idDemandeur = idDemandeur;
+		this.date_import = dateImport;
+		this.id_demandeur = idDemandeur;
 	}
 
 	public int getId() {
@@ -49,19 +55,19 @@ public class Import {
 	}
 
 	public Date getDateImport() {
-		return dateImport;
+		return date_import;
 	}
 
 	public void setDateImport(Date dateImport) {
-		this.dateImport = dateImport;
+		this.date_import = dateImport;
 	}
 
 	public Utilisateur getIdDemandeur() {
-		return idDemandeur;
+		return id_demandeur;
 	}
 
 	public void setIdDemandeur(Utilisateur idDemandeur) {
-		this.idDemandeur = idDemandeur;
+		this.id_demandeur = idDemandeur;
 	}
 
 	public List<Fichier> getFichiers() {

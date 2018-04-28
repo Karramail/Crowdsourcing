@@ -1,16 +1,9 @@
 package ppdCrowd.Crowdsourcing;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.http.HttpStatus;
@@ -22,8 +15,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import ppdCrowd.Crowdsourcing.dao.FichierDao;
+import ppdCrowd.Crowdsourcing.dao.LigneDao;
+import ppdCrowd.Crowdsourcing.dao.ThemeDao;
 import ppdCrowd.Crowdsourcing.entity.Comparaison;
+import ppdCrowd.Crowdsourcing.entity.Fichier;
 import ppdCrowd.Crowdsourcing.entity.Ligne;
+import ppdCrowd.Crowdsourcing.entity.Theme;
 
 
 @Controller
@@ -34,15 +32,18 @@ public class MyWebService {
 	int percentMin = 45;
 	boolean champs1= false, champs2= false, champs3 = false, champs4 = false;
 	
+	LigneDao ligneDao = new LigneDao();
+	
+	ThemeDao themeDao = new ThemeDao();
+	
+	FichierDao fichierDao = new FichierDao();
+	
 	@PersistenceContext
 	static	EntityManager entityManager;
 	
 	
 	public MyWebService() {
 		super();
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("manager1");
-		entityManager = emf.createEntityManager();
-
 	}
 
 	//fonction permettant de récuperer l'ensemble des lignes contenues dans un fichier passé en paramètre
@@ -54,9 +55,31 @@ public class MyWebService {
 	@RequestMapping(value = "/ligne", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<Ligne> getLignes() throws SQLException{
-		return entityManager.createQuery("SELECT l FROM Ligne l").getResultList(); 
+	public List<Ligne> getLignes() throws Exception{
+		return ligneDao.getAllLignes();
 	}
+	
+	@RequestMapping(value = "/theme", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<Theme> getThemes() throws Exception{
+		return themeDao.getAllThemes();
+	}
+	
+	@RequestMapping(value = "/fichier", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<Fichier> getFichiers() throws Exception{
+		return fichierDao.getAllFichiers();
+	}
+	
+	@RequestMapping(value = "/fichierByTheme/{idTheme}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<Fichier> getFichiersByTheme(@PathVariable("idTheme") int idTheme) throws Exception{
+		return fichierDao.getFichiersByTheme(idTheme);
+	}
+
 
 	
 	
