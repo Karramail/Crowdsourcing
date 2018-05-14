@@ -35,6 +35,14 @@ public class Comparaison {
 	private int resChamp3;
 	private int resChamp4;
 	
+	private Float resAttribut1;
+	private Float resAttribut2;
+	private Float resAttribut3;
+	private Float resAttribut4;
+	
+	private int nbOui;
+	private int nbNon;
+	
 	public Comparaison() {
 		super();
 	}
@@ -102,5 +110,56 @@ public class Comparaison {
 	public void setResChamp4(int resChamp4) {
 		this.resChamp4 = resChamp4;
 	}
+
+	public Float getResAttribut1() {
+		return resAttribut1;
+	}
+
+	public void setResAttribut1(Float resAttribut1) {
+		this.resAttribut1 = resAttribut1;
+	}
+
+	public Float getResAttribut2() {
+		return resAttribut2;
+	}
+
+	public void setResAttribut2(Float resAttribut2) {
+		this.resAttribut2 = resAttribut2;
+	}
+
+	public Float getResAttribut3() {
+		return resAttribut3;
+	}
+
+	public void setResAttribut3(Float resAttribut3) {
+		this.resAttribut3 = resAttribut3;
+	}
+
+	public Float getResAttribut4() {
+		return resAttribut4;
+	}
+
+	public void setResAttribut4(Float resAttribut4) {
+		this.resAttribut4 = resAttribut4;
+	}
+
+	public int getNbOui() {
+		return nbOui;
+	}
+
+	public void setNbOui(int nbOui) {
+		this.nbOui = nbOui;
+	}
+
+	public int getNbNon() {
+		return nbNon;
+	}
+
+	public void setNbNon(int nbNon) {
+		this.nbNon = nbNon;
+	}
+	
+	
+	
 
 }

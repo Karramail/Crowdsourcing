@@ -15,12 +15,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import ppdCrowd.Crowdsourcing.dao.AttributDao;
+import ppdCrowd.Crowdsourcing.dao.ComparaisonDao;
 import ppdCrowd.Crowdsourcing.dao.FichierDao;
 import ppdCrowd.Crowdsourcing.dao.LigneDao;
+import ppdCrowd.Crowdsourcing.dao.ResultatAttributDao;
+import ppdCrowd.Crowdsourcing.dao.ResultatDao;
 import ppdCrowd.Crowdsourcing.dao.ThemeDao;
+import ppdCrowd.Crowdsourcing.entity.Attribut;
 import ppdCrowd.Crowdsourcing.entity.Comparaison;
 import ppdCrowd.Crowdsourcing.entity.Fichier;
 import ppdCrowd.Crowdsourcing.entity.Ligne;
+import ppdCrowd.Crowdsourcing.entity.ResultatAttribut;
 import ppdCrowd.Crowdsourcing.entity.Theme;
 
 
@@ -37,6 +43,14 @@ public class MyWebService {
 	ThemeDao themeDao = new ThemeDao();
 	
 	FichierDao fichierDao = new FichierDao();
+	
+	ComparaisonDao compDao = new ComparaisonDao();
+	
+	AttributDao atrDao = new AttributDao();
+	
+	ResultatDao resDao = new ResultatDao();
+	
+	ResultatAttributDao resAtrDao = new ResultatAttributDao();
 	
 	@PersistenceContext
 	static	EntityManager entityManager;
@@ -80,7 +94,33 @@ public class MyWebService {
 		return fichierDao.getFichiersByTheme(idTheme);
 	}
 
+	@RequestMapping(value = "/comparaison", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<Comparaison> getComparaisons() throws Exception{
+		return compDao.getAllComparaison();
+	}
+	
+	@RequestMapping(value = "/comparaisonByTheme/{idTheme}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<Comparaison> getComparaisonByTheme(@PathVariable("idTheme") int idTheme) throws Exception{
+		return compDao.getComparaisonByTheme(idTheme);
+	}
+	
+	@RequestMapping(value = "/comparaisonByImport/{idImport}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<Comparaison> getComparaisonByImport(@PathVariable("idImport") int idImport) throws Exception{
+		return compDao.getComparaisonByImport(idImport);
+	}
 
+	@RequestMapping(value = "/attributByImport/{idImport}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<Attribut> getAttributByImport(@PathVariable("idImport") int idImport) throws Exception{
+		return atrDao.getAttributByImport(idImport);
+	}
 	
 	
 	@GetMapping(value = "/traitement/{idFichier1}/{idFichier2}")
@@ -110,6 +150,50 @@ public class MyWebService {
 			}
 		}
 		return "Traitement Terminé";
+	}
+	
+	
+	@RequestMapping(value = "/countPosNeg/{idImport}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public String CountResultatPosNegByComp(@PathVariable("idImport") int idImport) throws Exception{
+		 List<Comparaison> comp = compDao.getComparaisonByImport(idImport);
+		 for (Comparaison c : comp) {
+			 int pos = resDao.countResultatPositifByComp(c.getId());
+			 int neg = resDao.countResultatNegatifByComp(c.getId());
+			 compDao.updateNbPosNeg(c, pos, neg);
+		 }
+		return "traitement effectué";
+	}
+	
+	@RequestMapping(value = "/matriceSimilitude/{idImport}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public String CreateMatriceSimilitude(@PathVariable("idImport") int idImport) throws Exception{
+		 List<Comparaison> comp = compDao.getComparaisonByImport(idImport);
+		 List<Attribut> atr = atrDao.getAttributByImport(idImport);
+		 int left = 0;
+		 int tot = 0;
+		 Float fin = (float) 0;
+		 for (Comparaison c : comp) {
+			 for (Attribut a : atr) {
+				 List <ResultatAttribut> res = resAtrDao.getResByCompAndAtr(c.getId(), a.getId());
+				 left = 0;
+				 tot = 0;
+				 fin = (float) 0;
+				 for (ResultatAttribut r : res) {
+					 if (r.getTypeAtr().equals("Left")) {
+						 left ++;
+					 }
+					 tot ++;
+				 }
+				 if (left != 0 && tot != 0) {
+					 fin = (float) (left/tot);
+				 }
+				 compDao.updateCompAtr(c, fin, a);
+			 }
+		 }
+		return "traitement effectué";
 	}
 
 

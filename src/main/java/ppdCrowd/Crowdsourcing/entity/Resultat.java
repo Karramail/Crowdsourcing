@@ -1,12 +1,11 @@
 package ppdCrowd.Crowdsourcing.entity;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Resultat {
@@ -17,25 +16,19 @@ public class Resultat {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	private String champsLeft;
+	private boolean identique;
 	
-	private String champsRight;
+	@JsonIgnore
+	@ManyToOne
+	private Utilisateur idUtilisateur;
 	
-	@OneToOne
-	private Import idImport;
+	@JsonIgnore
+	@ManyToOne
+	private Comparaison idTuple;
 	
 	public Resultat() {
 		super();
 		
-	}
-	
-	
-
-	public Resultat(String champsLeft, String champsRight, Import idImport) {
-		super();
-		this.champsLeft = champsLeft;
-		this.champsRight = champsRight;
-		this.idImport = idImport;
 	}
 
 
@@ -48,29 +41,46 @@ public class Resultat {
 		this.id = id;
 	}
 
-	public String getChampsLeft() {
-		return champsLeft;
+
+
+	public boolean isIdentique() {
+		return identique;
 	}
 
-	public void setChampsLeft(String champsLeft) {
-		this.champsLeft = champsLeft;
+
+
+	public void setIdentique(boolean identique) {
+		this.identique = identique;
 	}
 
-	public String getChampsRight() {
-		return champsRight;
+
+
+	public Utilisateur getIdUtilisateur() {
+		return idUtilisateur;
 	}
 
-	public void setChampsRight(String champsRight) {
-		this.champsRight = champsRight;
+
+
+	public void setIdUtilisateur(Utilisateur idUtilisateur) {
+		this.idUtilisateur = idUtilisateur;
 	}
 
-	public Import getIdImport() {
-		return idImport;
+
+
+	public Comparaison getIdTuple() {
+		return idTuple;
 	}
 
-	public void setIdImport(Import idImport) {
-		this.idImport = idImport;
+
+
+	public void setIdTuple(Comparaison idTuple) {
+		this.idTuple = idTuple;
 	}
+
+
+
+
+
 
 
 }

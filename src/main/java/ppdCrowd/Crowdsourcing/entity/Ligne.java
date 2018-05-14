@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Ligne {
 
@@ -15,6 +17,7 @@ public class Ligne {
 	
 	private int numeroLigne;
 	
+	@JsonIgnore
 	@ManyToOne
 	private Fichier idFichier;
 
