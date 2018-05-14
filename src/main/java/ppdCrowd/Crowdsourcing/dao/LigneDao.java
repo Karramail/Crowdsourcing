@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
+import ppdCrowd.Crowdsourcing.entity.Fichier;
 import ppdCrowd.Crowdsourcing.entity.Ligne;
 
 
@@ -46,6 +47,19 @@ public class LigneDao {
     public List<Ligne> getAllLignes() throws Exception {
         try {
         	return em.createQuery(JPQL_SELECT_ALL).getResultList(); 
+
+        } catch ( NoResultException e ) {
+            return null;
+        } catch ( Exception e ) {
+            throw new Exception( e );
+        }
+    }
+    
+    // Recherche de toutes les lignes d'un fichier
+
+    public List<Ligne> getLignesByFichier(int idFichier) throws Exception {
+        try {
+        	return em.createQuery("SELECT l FROM Ligne l Where l.idFichier.id=:idFichier").setParameter("idFichier", idFichier).getResultList(); 
 
         } catch ( NoResultException e ) {
             return null;

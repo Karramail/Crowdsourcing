@@ -34,6 +34,7 @@ public class ComparaisonDao {
     public void creer(Comparaison c) throws Exception {
 
         try {
+        	System.out.println("debut creer");
             em.persist(c);
         } catch (Exception e) {
             throw new Exception(e);
