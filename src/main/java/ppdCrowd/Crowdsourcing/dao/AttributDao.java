@@ -9,6 +9,7 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 import ppdCrowd.Crowdsourcing.entity.Attribut;
+import ppdCrowd.Crowdsourcing.entity.Comparaison;
 import ppdCrowd.Crowdsourcing.entity.Fichier;
 
 
@@ -38,6 +39,19 @@ public class AttributDao {
         } catch (Exception e) {
             throw new Exception(e);
         }
+        em.getTransaction().commit();
+
+    }
+    
+ public void updateAtrLAndR( Attribut a, Float res) throws Exception {
+    	
+    	em.getTransaction().begin();
+    	if (res > 0.5) {
+    		a.setTypeAtr("Left");
+    	}else {
+    		a.setTypeAtr("Right");
+    	}
+    	a.setResultat(res);
         em.getTransaction().commit();
 
     }

@@ -32,9 +32,8 @@ public class ComparaisonDao {
     // Enregistrement d'une nouvelle ligne
 
     public void creer(Comparaison c) throws Exception {
-
+    	em.getTransaction().begin();
         try {
-        	System.out.println("debut creer");
             em.persist(c);
         } catch (Exception e) {
             throw new Exception(e);

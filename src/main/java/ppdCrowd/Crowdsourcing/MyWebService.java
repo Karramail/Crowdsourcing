@@ -191,29 +191,65 @@ public class MyWebService {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public String CreateMatriceSimilitude(@PathVariable("idImport") int idImport) throws Exception{
-		List<Comparaison> comp = compDao.getComparaisonByImport(idImport);
-		List<Attribut> atr = atrDao.getAttributByImport(idImport);
-		int left = 0;
-		int tot = 0;
-		Float fin = (float) 0;
-		for (Comparaison c : comp) {
-			for (Attribut a : atr) {
-				List <ResultatAttribut> res = resAtrDao.getResByCompAndAtr(c.getId(), a.getId());
-				left = 0;
-				tot = 0;
-				fin = (float) 0;
-				for (ResultatAttribut r : res) {
-					if (r.getTypeAtr().equals("Left")) {
-						left ++;
-					}
-					tot ++;
-				}
-				if (left != 0 && tot != 0) {
-					fin = (float) (left/tot);
-				}
-				compDao.updateCompAtr(c, fin, a);
-			}
-		}
+
+		 List<Comparaison> comp = compDao.getComparaisonByImport(idImport);
+		 List<Attribut> atr = atrDao.getAttributByImport(idImport);
+		 int left = 0;
+		 int tot = 0;
+		 Float fin = 0f;
+		 for (Comparaison c : comp) {
+			 for (Attribut a : atr) {
+				 List <ResultatAttribut> res = resAtrDao.getResByCompAndAtr(c.getId(), a.getId());
+				 left = 0;
+				 tot = 0;
+				 fin = 0f;
+				 for (ResultatAttribut r : res) {
+					 if (r.getTypeAtr().equals("Left")) {
+						 left ++;
+					 }
+					 tot ++;
+				 }
+				 if (left != 0 && tot != 0) {
+					 fin = (float) left/ (float) tot;
+				 }
+				 compDao.updateCompAtr(c, fin, a);
+			 }
+		 }
+
+		return "traitement effectué";
+	}
+	
+	@RequestMapping(value = "/modelDependency/{idImport}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public String CreateMD(@PathVariable("idImport") int idImport) throws Exception{
+		 List<Comparaison> comp = compDao.getComparaisonByImport(idImport);
+		 List<Attribut> atr = atrDao.getAttributByImport(idImport);
+		 Float left = 0f;
+		 int tot = 0;
+		 Float fin = 0f;
+		 for (Attribut a : atr) {
+			 left = 0f;
+			 tot = 0;
+			 fin = 0f;
+			 for (Comparaison c : comp) {
+				 if (a.getPlace() == 1){
+					 left = left + c.getResAttribut1();
+				 }
+				 else if (a.getPlace() == 2){
+					 left = left + c.getResAttribut2();
+				 }
+				 else if (a.getPlace() == 3){
+					 left = left + c.getResAttribut3();
+				 }
+				 else if (a.getPlace() == 4){
+					 left = left + c.getResAttribut4();
+				 }
+				 tot ++;
+			 }
+			 fin = left / (float) tot;
+			 atrDao.updateAtrLAndR(a, fin);
+		 }
 		return "traitement effectué";
 	}
 
