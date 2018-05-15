@@ -64,7 +64,16 @@ public class MyWebService {
 	public List<Ligne> getLignes(int numfichier){
 		return entityManager.createQuery("SELECT l FROM LIGNE l WHERE idFichier.id = :numfichier").setParameter("numfichier", numfichier).getResultList(); 
 	}
-
+	
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public String createComp() throws Exception{
+		Comparaison c = new Comparaison();
+		compDao.creer(c);
+		return "traitement effectué";
+	}
 
 	@RequestMapping(value = "/ligne", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
