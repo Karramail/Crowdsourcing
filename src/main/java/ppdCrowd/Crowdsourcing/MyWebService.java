@@ -35,27 +35,27 @@ public class MyWebService {
 
 	List<Comparaison> tabRes = new ArrayList<Comparaison>();
 	int moyChamps1, moyChamps2, moyChamps3, moyChamps4;
-	int percentMin = 45;
+
 	boolean champs1= false, champs2= false, champs3 = false, champs4 = false;
-	
+
 	LigneDao ligneDao = new LigneDao();
-	
+
 	ThemeDao themeDao = new ThemeDao();
-	
+
 	FichierDao fichierDao = new FichierDao();
-	
+
 	ComparaisonDao compDao = new ComparaisonDao();
-	
+
 	AttributDao atrDao = new AttributDao();
-	
+
 	ResultatDao resDao = new ResultatDao();
-	
+
 	ResultatAttributDao resAtrDao = new ResultatAttributDao();
-	
+
 	@PersistenceContext
 	static	EntityManager entityManager;
-	
-	
+
+
 	public MyWebService() {
 		super();
 	}
@@ -65,58 +65,62 @@ public class MyWebService {
 		return entityManager.createQuery("SELECT l FROM LIGNE l WHERE idFichier.id = :numfichier").setParameter("numfichier", numfichier).getResultList(); 
 	}
 	
-	
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public String createComp() throws Exception{
-		Comparaison c = new Comparaison();
-		compDao.creer(c);
-		return "traitement effectué";
-	}
-
+	// permet de récupérer l'ensemble des Lignes de la BDD
 	@RequestMapping(value = "/ligne", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<Ligne> getLignes() throws Exception{
 		return ligneDao.getAllLignes();
 	}
-	
+
+	// permet de récupérer l'ensemble des Thèmes de la BDD	
 	@RequestMapping(value = "/theme", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<Theme> getThemes() throws Exception{
 		return themeDao.getAllThemes();
 	}
-	
+	// permet de récupérer l'ensemble des Fichiers de la BDD
 	@RequestMapping(value = "/fichier", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<Fichier> getFichiers() throws Exception{
 		return fichierDao.getAllFichiers();
 	}
-	
-	@RequestMapping(value = "/fichierByTheme/{idTheme}", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public List<Fichier> getFichiersByTheme(@PathVariable("idTheme") int idTheme) throws Exception{
-		return fichierDao.getFichiersByTheme(idTheme);
-	}
 
+	//permet de récuperer l'ensemble des Bomparaisons de la BDD
 	@RequestMapping(value = "/comparaison", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<Comparaison> getComparaisons() throws Exception{
 		return compDao.getAllComparaison();
 	}
+
+	// permet de récupérer l'ensemble des Fichiers de la BDD selon un thème particulier 
+	@RequestMapping(value = "/fichierByTheme/{idTheme}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<Fichier> getFichiersByTheme(@PathVariable("idTheme") int idTheme) throws Exception{
+		return fichierDao.getFichiersByTheme(idTheme);
+	}
 	
+	// permet de récupérer l'ensemble des Lignes de la BDD selon un fichier particulier 
+	@RequestMapping(value = "/ligneByFichier/{idFichier}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<Ligne> getLignesByFichier(@PathVariable("idFichier") int idFichier) throws Exception{
+		return ligneDao.getLignesByFichier(idFichier);
+	}
+
+	// permet de récupérer l'ensemble des Comparaisons de la BDD selon un thème particulier
 	@RequestMapping(value = "/comparaisonByTheme/{idTheme}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<Comparaison> getComparaisonByTheme(@PathVariable("idTheme") int idTheme) throws Exception{
 		return compDao.getComparaisonByTheme(idTheme);
 	}
-	
+
+	// permet de récupérer l'ensemble des Comparaisons de la BDD selon un import particulier
 	@RequestMapping(value = "/comparaisonByImport/{idImport}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -124,31 +128,34 @@ public class MyWebService {
 		return compDao.getComparaisonByImport(idImport);
 	}
 
+	// permet de récupérer l'ensemble des Attributs de la BDD selon un import particulier
 	@RequestMapping(value = "/attributByImport/{idImport}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<Attribut> getAttributByImport(@PathVariable("idImport") int idImport) throws Exception{
 		return atrDao.getAttributByImport(idImport);
 	}
-	
-	
-	@GetMapping(value = "/traitement/{idFichier1}/{idFichier2}")
+
+
+	@GetMapping(value = "/traitement/{idFichier1}/{idFichier2}/{percentMinimum}")
 	@ResponseBody
-	public String detectTuples(@PathVariable int idFichier1, @PathVariable int idFichier2){
+	public String detectTuples(@PathVariable int idFichier1, @PathVariable int idFichier2, @PathVariable int percentMinimum) throws Exception{
 		algo detect = new algo();
 		List<Ligne> tabLigne = new ArrayList<Ligne>();
 		List<Ligne> tabLigne2 = new ArrayList<Ligne>();
 
 		int i=0, j=0;
-
-		tabLigne = getLignes(idFichier1);
-		tabLigne2 = getLignes(idFichier2);
-
+		System.out.println("chargement");
+		tabLigne = 	ligneDao.getLignesByFichier(idFichier1);
+		tabLigne2 = ligneDao.getLignesByFichier(idFichier2);
+		System.out.println("chargement termine");
 		for ( i = 0; i < tabLigne.size(); i++) {
 			Ligne l1 = tabLigne.get(i);
 			for ( j = 0; j < tabLigne2.size(); j++) {
 				Comparaison c = new Comparaison();
+				
 				Ligne l2 = tabLigne2.get(j);
+				System.out.println(i & j );
 				c.setIdLigne1(l1);
 				c.setIdLigne2(l2);
 				c.setResChamp1(algo.pecentageOfTextMatch(l1.getChamps1(), l2.getChamps1()));
@@ -158,27 +165,33 @@ public class MyWebService {
 				tabRes.add(c);
 			}
 		}
+		System.out.println("fin");
+		attributs(percentMinimum);
+		System.out.println("attributs fin");
+		persistComparaison(percentMinimum);
+		System.out.println("persist fin");
 		return "Traitement Terminé";
 	}
-	
-	
+
+
 	@RequestMapping(value = "/countPosNeg/{idImport}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public String CountResultatPosNegByComp(@PathVariable("idImport") int idImport) throws Exception{
-		 List<Comparaison> comp = compDao.getComparaisonByImport(idImport);
-		 for (Comparaison c : comp) {
-			 int pos = resDao.countResultatPositifByComp(c.getId());
-			 int neg = resDao.countResultatNegatifByComp(c.getId());
-			 compDao.updateNbPosNeg(c, pos, neg);
-		 }
+		List<Comparaison> comp = compDao.getComparaisonByImport(idImport);
+		for (Comparaison c : comp) {
+			int pos = resDao.countResultatPositifByComp(c.getId());
+			int neg = resDao.countResultatNegatifByComp(c.getId());
+			compDao.updateNbPosNeg(c, pos, neg);
+		}
 		return "traitement effectué";
 	}
-	
+
 	@RequestMapping(value = "/matriceSimilitude/{idImport}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public String CreateMatriceSimilitude(@PathVariable("idImport") int idImport) throws Exception{
+
 		 List<Comparaison> comp = compDao.getComparaisonByImport(idImport);
 		 List<Attribut> atr = atrDao.getAttributByImport(idImport);
 		 int left = 0;
@@ -202,6 +215,7 @@ public class MyWebService {
 				 compDao.updateCompAtr(c, fin, a);
 			 }
 		 }
+
 		return "traitement effectué";
 	}
 	
@@ -242,7 +256,7 @@ public class MyWebService {
 
 	@GetMapping(value = "attributs")
 	@ResponseBody
-	public String attributs(){
+	public String attributs(int percentMin){
 		int sumChamps1 = 0, sumChamps2 = 0, sumChamps3 = 0, sumChamps4 = 0;
 
 		int j =0;
@@ -277,32 +291,26 @@ public class MyWebService {
 		return s;
 	}
 
-	@GetMapping(value = "afficheQuestions")
-	@ResponseBody
-	public void afficheQuestions(){
 
-		String sqlString = "ceci est un test";
+	public void persistComparaison(int percentMin) throws Exception{
+
+		System.out.println("debut persist");
 		int i = 0;
 		for (Comparaison c : tabRes) {
 			System.out.println(i + "/" + tabRes.size());
 			i ++;
-
+			System.out.println(i + "/" + tabRes.size());
 			if ((champs1 == true && c.getResChamp1() >= percentMin) || (champs1 == false)) {
 				if((champs2  == true && c.getResChamp2() >= percentMin) || (champs2 == false)) {
 					if ((champs3  == true && c.getResChamp3() >= percentMin) || (champs3 == false)){
 						if ((champs4  == true && c.getResChamp4() >= percentMin) || (champs4 == false)){
-							entityManager.persist(c);
-							entityManager.flush();
-							
+							compDao.creer(c);
 						}
 					}
 				}
 			}
 		}
-		entityManager.getTransaction().commit();
 	}
-
-
 }
 
 

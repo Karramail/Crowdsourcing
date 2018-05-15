@@ -32,7 +32,7 @@ public class ComparaisonDao {
     // Enregistrement d'une nouvelle ligne
 
     public void creer(Comparaison c) throws Exception {
-    	 em.getTransaction().begin();
+    	em.getTransaction().begin();
         try {
             em.persist(c);
         } catch (Exception e) {
