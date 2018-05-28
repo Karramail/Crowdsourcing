@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 
 import ppdCrowd.Crowdsourcing.entity.Attribut;
 import ppdCrowd.Crowdsourcing.entity.Comparaison;
+import ppdCrowd.Crowdsourcing.entity.Ligne;
 
 
 public class ComparaisonDao {
