@@ -145,17 +145,18 @@ public class MyWebService {
 		List<Ligne> tabLigne2 = new ArrayList<Ligne>();
 
 		int i=0, j=0;
-		System.out.println("chargement");
+		
 		tabLigne = 	ligneDao.getLignesByFichier(idFichier1);
 		tabLigne2 = ligneDao.getLignesByFichier(idFichier2);
-		System.out.println("chargement termine");
+		
 		for ( i = 0; i < tabLigne.size(); i++) {
 			Ligne l1 = tabLigne.get(i);
+			System.out.println(i);
 			for ( j = 0; j < tabLigne2.size(); j++) {
 				Comparaison c = new Comparaison();
 				
 				Ligne l2 = tabLigne2.get(j);
-				System.out.println(i & j );
+				
 				c.setIdLigne1(l1);
 				c.setIdLigne2(l2);
 				c.setResChamp1(algo.pecentageOfTextMatch(l1.getChamps1(), l2.getChamps1()));
@@ -165,11 +166,8 @@ public class MyWebService {
 				tabRes.add(c);
 			}
 		}
-		System.out.println("fin");
 		attributs(percentMinimum);
-		System.out.println("attributs fin");
 		persistComparaison(percentMinimum);
-		System.out.println("persist fin");
 		return "Traitement Terminé";
 	}
 
@@ -254,9 +252,7 @@ public class MyWebService {
 	}
 
 
-	@GetMapping(value = "attributs")
-	@ResponseBody
-	public String attributs(int percentMin){
+	public void attributs(int percentMin){
 		int sumChamps1 = 0, sumChamps2 = 0, sumChamps3 = 0, sumChamps4 = 0;
 
 		int j =0;
@@ -285,31 +281,31 @@ public class MyWebService {
 			champs4 =true;
 		}
 
-		String s = champs1 +" "+ champs2 + " "+ champs3 + " " + champs4; 
-		s = s + "/n" + "Voici les pourcentages de ressemblance entre les attributs  : " + " / champs 1 : " + moyChamps1 +"% "+ " / champs 2 : " + moyChamps2 +"% "+ " / champs 3 : " + moyChamps3 +"% "+ " / champs 4 : " + moyChamps4 +"% ";
-
-		return s;
 	}
 
 
 	public void persistComparaison(int percentMin) throws Exception{
-
-		System.out.println("debut persist");
-		int i = 0;
-		for (Comparaison c : tabRes) {
-			System.out.println(i + "/" + tabRes.size());
-			i ++;
-			System.out.println(i + "/" + tabRes.size());
-			if ((champs1 == true && c.getResChamp1() >= percentMin) || (champs1 == false)) {
-				if((champs2  == true && c.getResChamp2() >= percentMin) || (champs2 == false)) {
-					if ((champs3  == true && c.getResChamp3() >= percentMin) || (champs3 == false)){
-						if ((champs4  == true && c.getResChamp4() >= percentMin) || (champs4 == false)){
-							compDao.creer(c);
-						}
-					}
-				}
-			}
+		int i =0;
+		if (champs1 == true){
+			tabRes.removeIf(c -> c.getResChamp1() <= percentMin);
 		}
+		if (champs2 == true){
+			tabRes.removeIf(c -> c.getResChamp2() <= percentMin);
+		}
+		if (champs3 == true){
+			tabRes.removeIf(c -> c.getResChamp3() <= percentMin);
+		}
+		if (champs4 == true){
+			tabRes.removeIf(c -> c.getResChamp4() <= percentMin);
+		}
+
+		  for (Comparaison c : tabRes) {
+			  compDao.creer(c);
+	   		  i++;
+	   		  System.out.println(i+"/"+tabRes.size());
+		}
+			
+
 	}
 }
 
