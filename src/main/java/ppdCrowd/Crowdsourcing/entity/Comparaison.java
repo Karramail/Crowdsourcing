@@ -26,37 +26,22 @@ public class Comparaison {
 	@ManyToOne
 	private Ligne idLigne2;
 
-	@JsonIgnore
-	@OneToMany (mappedBy="idComparaison", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<ResultatComparaison> resultatComparaisons;
-
-	private int resChamp1;
-	private int resChamp2;
-	private int resChamp3;
-	private int resChamp4;
 	
-	private Float resAttribut1;
-	private Float resAttribut2;
-	private Float resAttribut3;
-	private Float resAttribut4;
+	private int levChamp1;
+	private int levChamp2;
+	private int levChamp3;
+	private int levChamp4;
+	private int levChamp5;
 	
-	private int nbOui;
-	private int nbNon;
 	
 	public Comparaison() {
 		super();
 	}
 	
-	public Comparaison(int id, Ligne idLigne1, Ligne idLigne2, List<ResultatComparaison> resultatComparaisons,
-			int resChamp1, int resChamp2, int resChamp3, int resChamp4) {
+	public Comparaison(Ligne idLigne1, Ligne idLigne2) {
 
 		this.idLigne1 = idLigne1;
 		this.idLigne2 = idLigne2;
-		this.resultatComparaisons = resultatComparaisons;
-		this.resChamp1 = resChamp1;
-		this.resChamp2 = resChamp2;
-		this.resChamp3 = resChamp3;
-		this.resChamp4 = resChamp4;
 	}
 	
 	
@@ -80,86 +65,46 @@ public class Comparaison {
 	public void setIdLigne2(Ligne idLigne2) {
 		this.idLigne2 = idLigne2;
 	}
-	public List<ResultatComparaison> getResultatComparaisons() {
-		return resultatComparaisons;
-	}
-	public void setResultatComparaisons(List<ResultatComparaison> resultatComparaisons) {
-		this.resultatComparaisons = resultatComparaisons;
-	}
-	public int getResChamp1() {
-		return resChamp1;
-	}
-	public void setResChamp1(int resChamp1) {
-		this.resChamp1 = resChamp1;
-	}
-	public int getResChamp2() {
-		return resChamp2;
-	}
-	public void setResChamp2(int resChamp2) {
-		this.resChamp2 = resChamp2;
-	}
-	public int getResChamp3() {
-		return resChamp3;
-	}
-	public void setResChamp3(int resChamp3) {
-		this.resChamp3 = resChamp3;
-	}
-	public int getResChamp4() {
-		return resChamp4;
-	}
-	public void setResChamp4(int resChamp4) {
-		this.resChamp4 = resChamp4;
+
+	public int getLevChamp1() {
+		return levChamp1;
 	}
 
-	public Float getResAttribut1() {
-		return resAttribut1;
+	public void setLevChamp1(int levChamp1) {
+		this.levChamp1 = levChamp1;
 	}
 
-	public void setResAttribut1(Float resAttribut1) {
-		this.resAttribut1 = resAttribut1;
+	public int getLevChamp2() {
+		return levChamp2;
 	}
 
-	public Float getResAttribut2() {
-		return resAttribut2;
+	public void setLevChamp2(int levChamp2) {
+		this.levChamp2 = levChamp2;
 	}
 
-	public void setResAttribut2(Float resAttribut2) {
-		this.resAttribut2 = resAttribut2;
+	public int getLevChamp3() {
+		return levChamp3;
 	}
 
-	public Float getResAttribut3() {
-		return resAttribut3;
+	public void setLevChamp3(int levChamp3) {
+		this.levChamp3 = levChamp3;
 	}
 
-	public void setResAttribut3(Float resAttribut3) {
-		this.resAttribut3 = resAttribut3;
+	public int getLevChamp4() {
+		return levChamp4;
 	}
 
-	public Float getResAttribut4() {
-		return resAttribut4;
+	public void setLevChamp4(int levChamp4) {
+		this.levChamp4 = levChamp4;
 	}
 
-	public void setResAttribut4(Float resAttribut4) {
-		this.resAttribut4 = resAttribut4;
+	public int getLevChamp5() {
+		return levChamp5;
 	}
 
-	public int getNbOui() {
-		return nbOui;
+	public void setLevChamp5(int levChamp5) {
+		this.levChamp5 = levChamp5;
 	}
-
-	public void setNbOui(int nbOui) {
-		this.nbOui = nbOui;
-	}
-
-	public int getNbNon() {
-		return nbNon;
-	}
-
-	public void setNbNon(int nbNon) {
-		this.nbNon = nbNon;
-	}
-	
-	
 	
 
 }

@@ -5,13 +5,12 @@
     <class>ppdCrowd.Crowdsourcing.entity.Fichier</class>
     <class>ppdCrowd.Crowdsourcing.entity.Import</class>
     <class>ppdCrowd.Crowdsourcing.entity.Ligne</class>
-	<class>ppdCrowd.Crowdsourcing.entity.Resultat</class>
-    <class>ppdCrowd.Crowdsourcing.entity.ResultatComparaison</class>
+    <class>ppdCrowd.Crowdsourcing.entity.ComparaisonCrowder</class>
+    <class>ppdCrowd.Crowdsourcing.entity.ResultatCrowder</class>
     <class>ppdCrowd.Crowdsourcing.entity.Theme</class>
     <class>ppdCrowd.Crowdsourcing.entity.Utilisateur</class>
     <class>ppdCrowd.Crowdsourcing.entity.Comparaison</class>
     <class>ppdCrowd.Crowdsourcing.entity.Attribut</class>
-    <class>ppdCrowd.Crowdsourcing.entity.ResultatAttribut</class>
     
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     
@@ -20,8 +19,6 @@
        	<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
 	    	<property name="javax.persistence.jdbc.user" value="projetsql@ppdserveur"/>
 	    	<property name="javax.persistence.jdbc.password" value="Ppdcrowd1"/>
-	    	<property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
-		<property name="eclipselink.ddl-generation.output-mode" value="database"/>
 		<property name="eclipselink.logging.level" value="FINE"/>
     </properties>
     

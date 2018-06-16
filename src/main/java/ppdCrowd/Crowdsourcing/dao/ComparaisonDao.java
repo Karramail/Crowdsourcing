@@ -42,30 +42,6 @@ public class ComparaisonDao {
         em.getTransaction().commit();
 
     }
-    
-    public void updateNbPosNeg(Comparaison c, int pos, int neg) throws Exception {
-    	
-    	em.getTransaction().begin();
-    	c.setNbOui(pos);
-    	c.setNbNon(neg);
-        em.getTransaction().commit();
-
-    }
-    
- public void updateCompAtr(Comparaison c, Float res, Attribut a) throws Exception {
-    	
-    	em.getTransaction().begin();
-    	if (a.getPlace() == 1)
-    		c.setResAttribut1(res);
-    	else if (a.getPlace() == 2)
-    		c.setResAttribut2(res);
-    	else if (a.getPlace() == 3)
-    		c.setResAttribut3(res);
-    	else if (a.getPlace() == 4)
-    		c.setResAttribut4(res);
-        em.getTransaction().commit();
-
-    }
 
 
     // Recherche de toutes les lignes
