@@ -8,12 +8,15 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
+import ppdCrowd.Crowdsourcing.entity.Attribut;
+import ppdCrowd.Crowdsourcing.entity.Comparaison;
 import ppdCrowd.Crowdsourcing.entity.Fichier;
+import ppdCrowd.Crowdsourcing.entity.Import;
 
 
-public class FichierDao {
+public class ImportDao {
 
-	private static final String JPQL_SELECT_ALL = "SELECT f FROM Fichier f";
+	private static final String JPQL_SELECT_ALL = "SELECT i FROM Imports i";
 	
 
     // Injection du manager, qui s'occupe de la connexion avec la BDD
@@ -21,7 +24,7 @@ public class FichierDao {
     @PersistenceContext
     private static EntityManager em;
     
-   public FichierDao () {
+   public ImportDao () {
 	   super();
 	   EntityManagerFactory emf = Persistence.createEntityManagerFactory("manager1");
 	   em = emf.createEntityManager();
@@ -30,10 +33,10 @@ public class FichierDao {
 
     // Enregistrement d'une nouvelle ligne
 
-    public void creer(Fichier f) throws Exception {
+    public void creer(Import i) throws Exception {
 
         try {
-            em.persist(f);
+            em.persist(i);
         } catch (Exception e) {
             throw new Exception(e);
         }
@@ -44,7 +47,7 @@ public class FichierDao {
 
     // Recherche de toutes les lignes
 
-    public List<Fichier> getAllFichiers() throws Exception {
+    public List<Attribut> getAllImports() throws Exception {
         try {
         	return em.createQuery(JPQL_SELECT_ALL).getResultList(); 
 
@@ -55,11 +58,10 @@ public class FichierDao {
         }
     }
     
-    
-    public List<Fichier> getFichiersByTheme(int idTheme) throws Exception {
+    public Import getImportById(int idImport) throws Exception {
         try {
-        	return em.createQuery("SELECT f FROM Fichier f Where f.id_theme.id=:idTheme").setParameter("idTheme", idTheme).getResultList(); 
-
+        	List<Import> imp = em.createQuery("SELECT i FROM Import i Where i.id =:idImport").setParameter("idImport", idImport).getResultList(); 
+        	return imp.get(0);
         } catch ( NoResultException e ) {
             return null;
         } catch ( Exception e ) {
@@ -67,10 +69,9 @@ public class FichierDao {
         }
     }
     
-    public Fichier getFichierById(int idFichier) throws Exception {
+    public List<Import> getImportByUser(int idDemandeur) throws Exception {
         try {
-        	List <Fichier> fichiers =  em.createQuery("SELECT f FROM Fichier f Where f.id=:idFichier").setParameter("idFichier", idFichier).getResultList(); 
-        	return fichiers.get(0);
+        	return em.createQuery("SELECT i FROM Import i Where i.id_demandeur.id =:idDemandeur").setParameter("idDemandeur", idDemandeur).getResultList(); 
         } catch ( NoResultException e ) {
             return null;
         } catch ( Exception e ) {

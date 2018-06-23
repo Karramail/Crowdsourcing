@@ -8,12 +8,13 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
+import ppdCrowd.Crowdsourcing.entity.Attribut;
 import ppdCrowd.Crowdsourcing.entity.ComparaisonCrowder;
 
 
 public class ComparaisonCrowderDao {
 
-	private static final String JPQL_SELECT_ALL = "SELECT a FROM Attribut a";
+	private static final String JPQL_SELECT_ALL = "SELECT c FROM ComparasonCrowder c";
 	
 
     // Injection du manager, qui s'occupe de la connexion avec la BDD
@@ -25,6 +26,17 @@ public class ComparaisonCrowderDao {
 	   super();
 	   EntityManagerFactory emf = Persistence.createEntityManagerFactory("manager1");
 	   em = emf.createEntityManager();
+   }
+   
+   public void creer(ComparaisonCrowder c) throws Exception {
+
+       try {
+           em.persist(c);
+       } catch (Exception e) {
+           throw new Exception(e);
+       }
+       em.getTransaction().commit();
+
    }
     
     

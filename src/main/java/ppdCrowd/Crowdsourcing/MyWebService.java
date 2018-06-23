@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,16 +20,20 @@ import ppdCrowd.Crowdsourcing.dao.AttributDao;
 import ppdCrowd.Crowdsourcing.dao.ComparaisonCrowderDao;
 import ppdCrowd.Crowdsourcing.dao.ComparaisonDao;
 import ppdCrowd.Crowdsourcing.dao.FichierDao;
+import ppdCrowd.Crowdsourcing.dao.ImportDao;
 import ppdCrowd.Crowdsourcing.dao.LigneDao;
 import ppdCrowd.Crowdsourcing.dao.ResultatCrowderDao;
 import ppdCrowd.Crowdsourcing.dao.ThemeDao;
+import ppdCrowd.Crowdsourcing.dao.UserDao;
 import ppdCrowd.Crowdsourcing.entity.Attribut;
 import ppdCrowd.Crowdsourcing.entity.Comparaison;
 import ppdCrowd.Crowdsourcing.entity.ComparaisonCrowder;
 import ppdCrowd.Crowdsourcing.entity.Fichier;
+import ppdCrowd.Crowdsourcing.entity.Import;
 import ppdCrowd.Crowdsourcing.entity.Ligne;
 import ppdCrowd.Crowdsourcing.entity.ResultatCrowder;
 import ppdCrowd.Crowdsourcing.entity.Theme;
+import ppdCrowd.Crowdsourcing.entity.Utilisateur;
 
 
 @Controller
@@ -48,6 +53,10 @@ public class MyWebService {
 	ComparaisonDao compDao = new ComparaisonDao();
 
 	AttributDao atrDao = new AttributDao();
+	
+	ImportDao impDao = new ImportDao();
+	
+	UserDao userDao = new UserDao();
 
 	ComparaisonCrowderDao compCrowderDao = new ComparaisonCrowderDao();
 
@@ -136,8 +145,98 @@ public class MyWebService {
 	public List<Attribut> getAttributByImport(@PathVariable("idImport") int idImport) throws Exception{
 		return atrDao.getAttributByImport(idImport);
 	}
+	
+	// permet de créer l'ensemble des Attributs de la BDD selon un import
+	// particulier
+	@RequestMapping(value = "/addAttributs/{idImport}", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public String addAttributs(@PathVariable("idImport") int idImport, @RequestBody List<Attribut> attributs)
+			throws Exception {
 
+		Import imp = impDao.getImportById(idImport);
+		for (Attribut a : attributs) {
+			a.setIdImport(imp);
+			atrDao.creer(a);
+		}
+		return "Attribut créés";
+	}
 
+	// permet de créer un import
+	@RequestMapping(value = "/addImport", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public String addImport(@RequestBody Import imp) {
+		try {
+			impDao.creer(imp);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "Import créé";
+	}
+	
+	// permet de créer un utilisateur
+	@RequestMapping(value = "/addUtilisateur", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public String addUtilisateur(@RequestBody Utilisateur user) {
+		try {
+			userDao.creer(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "Utilisateur créé";
+	}
+	
+	// permet de créer un fichier
+	@RequestMapping(value = "/addFichier", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public String addFichier(@RequestBody Fichier fic) {
+		try {
+			fichierDao.creer(fic);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "Fichier créé";
+	}
+	
+	// permet de créer un thème
+	@RequestMapping(value = "/addTheme", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public String addTheme(@RequestBody Theme t) {
+		try {
+			themeDao.creer(t);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "Theme créé";
+	}
+	
+	// permet de créer une réponse de Crowder sur une comparaison donnée
+	@RequestMapping(value = "/addReponse", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public String addComparaisonCrowder(@RequestBody ComparaisonCrowder c) {
+		try {
+			compCrowderDao.creer(c);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "Réponse Crowder créée";
+	}
+	
+	// ajoute une liste de lignes pour un fichier
+	@RequestMapping(value = "/addLignes/{idFichier}", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public String addLignes(@PathVariable("idFichier") int idFichier, @RequestBody List<Ligne> lignes)
+			throws Exception {
+
+		Fichier f = fichierDao.getFichierById(idFichier);
+		for (Ligne l : lignes) {
+			l.setIdFichier(f);
+			ligneDao.creer(l);
+		}
+		return "Lignes créées";
+	}
+			
+
+	// réalise l'algorithme de levenstein avec un paramètre de ratio à préciser
 	@GetMapping(value = "/traitement/{idFichier1}/{idFichier2}/{percentMinimum}")
 	@ResponseBody
 	public String detectTuples(@PathVariable int idFichier1, @PathVariable int idFichier2, @PathVariable int percentMinimum) throws Exception{
@@ -174,6 +273,7 @@ public class MyWebService {
 	}
 
 
+	//compter le nombre de réponses disant similaire par rapport au nombre total de réponses
 	@RequestMapping(value = "/countPosNeg/{idImport}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -197,6 +297,7 @@ public class MyWebService {
 		return "traitement effectué";
 	}
 
+	//création de la matrice de similitude pour chaque comparaison de l'import
 	@RequestMapping(value = "/matriceSimilitude/{idImport}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -265,6 +366,7 @@ public class MyWebService {
 		return "traitement effectué";
 	}
 	
+	// création du model dependency avec une règle pour un import
 	@RequestMapping(value = "/modelDependency/{idImport}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -323,6 +425,7 @@ public class MyWebService {
 	}
 
 
+	// calcul de Levenstein sur les attribut (fonction appelée par l'algo de Levenstein)
 	public void attributs(int percentMin){
 		int sumChamps1 = 0, sumChamps2 = 0, sumChamps3 = 0, sumChamps4 = 0, sumChamps5 = 0;
 
@@ -359,7 +462,7 @@ public class MyWebService {
 
 	}
 
-
+	// Persistance de la comparaison (fonction appelée dans l'algo de Levenstein)
 	public void persistComparaison(int percentMin) throws Exception{
 		int i =0;
 		if (champs1 == true){
