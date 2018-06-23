@@ -46,7 +46,7 @@ public class AttributDao {
  public void updateAtrLAndR( Attribut a, Float res) throws Exception {
     	
     	em.getTransaction().begin();
-    	if (res > 0.5) {
+    	if (res > 0.75) {
     		a.setTypeAtr("Left");
     	}else {
     		a.setTypeAtr("Right");
